@@ -23,7 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
-
+#include "Board.h"
+#include <random>
 class Game
 {
 public:
@@ -43,4 +44,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
+	std::mt19937_64 rng;
+	Board board;
+
 };

@@ -21,10 +21,12 @@
 #include "MainWindow.h"
 #include "Game.h"
 
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd )
+	wnd(wnd),
+	gfx(wnd),
+	rng(std::random_device()()),
+	board(gfx)
 {
 }
 
@@ -38,8 +40,19 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+
 }
 
 void Game::ComposeFrame()
 {
+	std::uniform_int_distribution<int> colorDist(0, 255);
+	for (int i = 0; i < board.Get_Grid_H(); i++)
+	{
+		for (int j = 0; j < board.Get_Grid_W(); j++)
+		{
+			Location loc = { i,j };
+			Color c(colorDist(rng), colorDist(rng), colorDist(rng));
+			board.Draw_Cell(loc, c);
+		}
+	}
 }

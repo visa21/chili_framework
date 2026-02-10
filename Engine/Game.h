@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Board.h"
+#include "Snake.h"
 #include <random>
 class Game
 {
@@ -45,6 +46,10 @@ private:
 	/*  User Variables              */
 	/********************************/
 	std::mt19937_64 rng;
+	Snake snek;
 	Board board;
-
+	Location delta_loc = { 1,0 };
+	bool gameIsOver = false;
+	int snakeMoveCounter = 0;
+	static constexpr int snakeMovePeriod{ 20 };
 };

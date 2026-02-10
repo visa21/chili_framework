@@ -20,13 +20,15 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "SpriteCodex.h"
 
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
 	rng(std::random_device()()),
-	board(gfx)
+	board(gfx),
+	snek({2,2})
 {
 }
 
@@ -40,19 +42,49 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-
+	if (!gameIsOver)
+	{
+		if (wnd.kbd.KeyIsPressed(VK_UP))
+		{
+			delta_loc = { 0,-1 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_DOWN))
+		{
+			delta_loc = { 0,1 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		{
+			delta_loc = { 1,0 };
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		{
+			delta_loc = { -1,0 };
+		}
+		++snakeMoveCounter;
+		if (snakeMoveCounter >= snakeMovePeriod)
+		{
+			Location next = snek.snakeNextHeadLocation(delta_loc);
+			if (!board.isInsideBoard(next) || snek.IllegalLocation(next)) {
+				gameIsOver = true;
+			}
+			else
+			{
+				snakeMoveCounter = 0;
+				snek.Moveby(delta_loc);
+				if (wnd.kbd.KeyIsPressed(VK_CONTROL))
+				{
+					snek.Grow();
+				}
+			}
+		}
+	}
 }
 
 void Game::ComposeFrame()
 {
-	std::uniform_int_distribution<int> colorDist(0, 255);
-	for (int i = 0; i < board.Get_Grid_H(); i++)
+	snek.Draw(board);
+	if (gameIsOver)
 	{
-		for (int j = 0; j < board.Get_Grid_W(); j++)
-		{
-			Location loc = { i,j };
-			Color c(colorDist(rng), colorDist(rng), colorDist(rng));
-			board.Draw_Cell(loc, c);
-		}
+		SpriteCodex::DrawGameOver(200,200,gfx);
 	}
 }

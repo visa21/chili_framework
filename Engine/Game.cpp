@@ -28,7 +28,8 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	rng(std::random_device()()),
 	board(gfx),
-	snek({2,2})
+	snek({ 2,2 }),
+	goal(rng,board,snek)
 {
 }
 
@@ -71,9 +72,10 @@ void Game::UpdateModel()
 			{
 				snakeMoveCounter = 0;
 				snek.Moveby(delta_loc);
-				if (wnd.kbd.KeyIsPressed(VK_CONTROL))
+				if (delta_loc == goal.GetLocation())
 				{
 					snek.Grow();
+					goal.Respawn(rng,board,snek);
 				}
 			}
 		}
@@ -83,6 +85,7 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	snek.Draw(board);
+	goal.Draw(board);
 	if (gameIsOver)
 	{
 		SpriteCodex::DrawGameOver(200,200,gfx);

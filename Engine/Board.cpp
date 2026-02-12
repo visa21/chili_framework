@@ -9,12 +9,12 @@ void Board::Draw_Cell(const Location& loc, Color c)
 	gfx.DrawRect(loc.x * dimension, loc.y * dimension, dimension, dimension, c);
 }
 
-int Board::Get_Grid_W()
+int Board::Get_Grid_W() const
 {
 	return width;
 }
 
-int Board::Get_Grid_H()
+int Board::Get_Grid_H() const
 {
 	return height;
 }

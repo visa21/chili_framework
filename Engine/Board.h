@@ -6,8 +6,8 @@ class Board
 public:
 	Board(Graphics& gfx);
 	void Draw_Cell(const Location& loc, Color c);
-	int Get_Grid_W();
-	int Get_Grid_H();
+	int Get_Grid_W() const;
+	int Get_Grid_H() const;
 	bool isInsideBoard(const Location& loc);
 private:
 	static constexpr int width = 10;
